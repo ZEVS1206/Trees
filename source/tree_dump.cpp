@@ -32,7 +32,7 @@ static void create_nodes_in_dump(struct Node *root, FILE *file_pointer)
     {
         create_nodes_in_dump(root->left, file_pointer);
     }
-    fprintf(file_pointer, "box%d [shape = record, label = \"{<node_adr>address = %p|<node_d>data = %d|{<node_l>left_node = %p|<node_r>right_node = %p}}\"];\n", root->index, root, root->data, root->left, root->left);
+    fprintf(file_pointer, "box%p [shape = record, label = \"{<node_adr>address = %p|<node_d>data = %d|{<node_l>left_node = %p|<node_r>right_node = %p}}\"];\n", root, root, root->data, root->left, root->right);
     if (root->right != NULL)
     {
         create_nodes_in_dump(root->right, file_pointer);
@@ -47,12 +47,12 @@ static void create_connections(struct Node *root, FILE *file_pointer)
     }
     if (root->left != NULL)
     {
-        fprintf(file_pointer, "box%d:<node_l>->box%d [color=red];\n", root->index, (root->left)->index);
+        fprintf(file_pointer, "box%p:<node_l>->box%p [color=red];\n", root, (root->left));
         create_connections(root->left, file_pointer);
     }
     if (root->right != NULL)
     {
-        fprintf(file_pointer, "box%d:<node_r>->box%d [color=red];\n", root->index, (root->right)->index);
+        fprintf(file_pointer, "box%p:<node_r>->box%p [color=green];\n", root, (root->right));
         create_connections(root->right, file_pointer);
     }
 }

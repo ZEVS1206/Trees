@@ -3,6 +3,8 @@
 
 #include "tree.h"
 
+static void clean_tree(struct Node *root);
+
 void create_new_node(struct Tree *tree, Tree_Elem_t element)
 {
     if (tree == NULL)
@@ -23,11 +25,15 @@ void create_new_node(struct Tree *tree, Tree_Elem_t element)
     {
         if ((tree->tmp_root)->left != NULL)
         {
-            printf("left\n");
             tree->tmp_root = (tree->tmp_root)->left;
             create_new_node(tree, element);
         }
         (tree->tmp_root)->left = (Node *) calloc(1, sizeof(Node));
+        if ((tree->tmp_root)->right != NULL)
+        {
+            free((tree->tmp_root)->right);
+        }
+        (tree->tmp_root)->right = NULL;
         if ((tree->tmp_root)->left == NULL)
         {
             tree->error = ERROR_OF_PUSH;
@@ -41,11 +47,15 @@ void create_new_node(struct Tree *tree, Tree_Elem_t element)
     {
         if ((tree->tmp_root)->right != NULL)
         {
-            printf("right\n");
             tree->tmp_root = (tree->tmp_root)->right;
             create_new_node(tree, element);
         }
         (tree->tmp_root)->right = (Node *) calloc(1, sizeof(Node));
+        if ((tree->tmp_root)->left != NULL)
+        {
+            free((tree->tmp_root)->left);
+        }
+        (tree->tmp_root)->left = NULL;
         if ((tree->tmp_root)->right == NULL)
         {
             tree->error = ERROR_OF_PUSH;
@@ -55,32 +65,6 @@ void create_new_node(struct Tree *tree, Tree_Elem_t element)
         tree->size_of_tree++;
         return;
     }
-    // while (1)
-    // {
-    //     if (element < root->data)
-    //     {
-    //         if (root->left != NULL)
-    //         {
-    //             root = root->left;
-    //             continue;
-    //         }
-    //         root->left = (Node *) calloc(1, sizeof(Node));
-    //         (root->left)->data = element;
-    //         break;
-    //     }
-    //     else
-    //     {
-    //         if (root->right != NULL)
-    //         {
-    //             root = root->right;
-    //             continue;
-    //         }
-    //         root->right = (Node *) calloc(1, sizeof(Node));
-    //         (root->right)->data = element;
-    //         break;
-    //     }
-    // }
-    // return NO_ERRORS;
 }
 
 void print_tree(struct Node *root)
@@ -102,3 +86,40 @@ void print_tree(struct Node *root)
     printf(")");
 }
 
+
+Errors_of_tree destructor(struct Tree *tree)
+{
+    if (tree == NULL)
+    {
+        return ERROR_OF_DESTRUCTOR;
+    }
+    tree->tmp_root = tree->root;
+    tree->root->data = 0;
+    tree->size_of_tree = 0;
+    clean_tree(tree->tmp_root);
+    if (tree->error != NO_ERRORS)
+    {
+        return tree->error;
+    }
+    return NO_ERRORS;
+}
+
+
+static void clean_tree(struct Node *root)
+{
+    if (root == NULL)
+    {
+        return;
+    }
+    if (root->left != NULL)
+    {
+        root->data = 0;
+        clean_tree(root->left);
+    }
+    if (root->right != NULL)
+    {
+        root->data = 0;
+        clean_tree(root->right);
+    }
+    free(root);
+}
