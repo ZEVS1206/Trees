@@ -1,0 +1,12 @@
+{
+"Is human?"
+    {
+        "Is a student of MIPT?"
+    }
+    {
+        "Is Poltorachka?"
+        {
+            "YEEEES"
+        }
+    }
+}
