@@ -5,26 +5,26 @@
         {
             "Is Kolya Kasparov?"
             {
-                "How good I am! It's Kolya Kasparov!"
+                "YEEEES"
             }
             {
-                "It's Egor Buditsky!"
+                "Is I am?"
+                {
+                "OH MY GOD!"
+                }
+                {
+                    "I don't know, who it can be((("
+                }
             }
         }
         {
             "Does he teach physics?"
             {
                 "Is Ovchinnikov?"
-                {
-                    "It's Ovchinnikov!"
-                }
             }
         }
     }
     {
-        "Is Poltorashka?"
-        {
-            "It's Poltorashka!"
-        }
+        "Is Poltorachka?"
     }
 }

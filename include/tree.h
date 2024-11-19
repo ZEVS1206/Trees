@@ -11,7 +11,9 @@ enum Errors_of_tree
     ERROR_OF_DESTRUCTOR     = 3,
     ERROR_OF_READ_TREE      = 4,
     ERROR_OF_READ_FROM_FILE = 5,
-    ERROR_OF_CONSTRUCTOR    = 6
+    ERROR_OF_CONSTRUCTOR    = 6,
+    ERROR_OF_RUN            = 7,
+    ERROR_OF_NO_DEFINITION  = 8
 };
 
 struct Node
@@ -31,7 +33,10 @@ struct Tree
     Errors_of_tree error;
 };
 
-void create_new_node(struct Tree *tree, Tree_Elem_t element);
+void Run(struct Tree *tree);
+void Akinator(struct Tree *tree);
+Errors_of_tree add_new_node(struct Node **root);
+//void create_new_node(struct Tree *tree, Tree_Elem_t element);
 void print_tree(struct Node *root);
 Errors_of_tree tree_destructor(struct Tree *tree);
 Errors_of_tree tree_constructor(struct Tree *tree);

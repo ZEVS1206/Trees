@@ -23,21 +23,7 @@ int main()
         fprintf(stderr, "error = %d\n", error);
         return 1;
     }
-    // tree.error = NO_ERRORS;
-    // tree.root = (Node *) calloc(1, sizeof(Node));
-    // tree.tmp_root = tree.root;
-    // tree.root->data = 50;
-    // tree.root->left = (Node *) calloc(1, sizeof(Node));
-    // tree.root->right = (Node *) calloc(1, sizeof(Node));
-    // (tree.root->left)->data = 30;
-    // (tree.root->left)->left = (Node *) calloc(1, sizeof(Node));
-    // ((tree.root->left)->left)->data = 10;
-    // (tree.root->right)->data = 70;
-    // (tree.root->right)->left = (Node *) calloc(1, sizeof(Node));
-    // (tree.root->right)->right = (Node *) calloc(1, sizeof(Node));
-    // ((tree.root->right)->left)->data = 65;
-    // ((tree.root->right)->right)->data = 80;
-    tree.tmp_root = tree.root;
+    Akinator(&tree);
     if (tree.error != NO_ERRORS)
     {
         fprintf(stderr, "error = %d\n", tree.error);
@@ -50,7 +36,6 @@ int main()
         fprintf(stderr, "error = %d\n", tree.error);
         return 1;
     }
-    //print_tree(tree.root);
     printf("\n");
     error = tree_destructor(&tree);
     if (error != NO_ERRORS)

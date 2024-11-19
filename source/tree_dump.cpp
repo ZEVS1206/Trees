@@ -36,11 +36,11 @@ static void create_nodes_in_dump(struct Node *root, FILE *file_pointer)
         create_nodes_in_dump(root->left, file_pointer);
     }
     char str[100] = {0};
-    printf("node = %p\n", root);
+    //printf("node = %p\n", root);
     if (root->data != NULL)
     {
         memcpy(str, root->data, root->size_of_data);
-        printf("node = %p\ndata = %s\n", root, str);
+        //printf("node = %p\ndata = %s\n", root, str);
         fprintf(file_pointer, "box%p "
                             "[shape = record,"
                             " label = \"{<node_adr>address = %p|<node_d>data = %s|"

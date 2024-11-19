@@ -76,14 +76,14 @@ Errors_of_tree get_tree_from_json(struct Tree *tree)
         return ERROR_OF_READ_TREE;
     }
     size_t size_of_file = get_size_of_file(file_pointer);
-    printf("size_of_file = %lu\n", size_of_file);
+    //printf("size_of_file = %lu\n", size_of_file);
     char *buffer = (char *)calloc(size_of_file, sizeof(char));
     end_pointer = &(buffer[size_of_file - 1]);
     size_t result_of_reading = fread(buffer, sizeof(char), size_of_file, file_pointer);
-    for (size_t i = 0; i < size_of_file; i++)
-    {
-        printf("%c", buffer[i]);
-    }
+    // for (size_t i = 0; i < size_of_file; i++)
+    // {
+    //     printf("%c", buffer[i]);
+    // }
     if (result_of_reading != size_of_file)
     {
         return ERROR_OF_READ_FROM_FILE;
@@ -120,13 +120,13 @@ static size_t get_size_of_file(FILE *file_pointer)
 
 static void parse_information_from_file(struct Node *root, char **buffer)
 {
-    printf("element = %c\n", *buffer[0]);
+    //printf("element = %c\n", *buffer[0]);
     if (isspace(*buffer[0]))
     {
         *buffer = skip_spaces(*buffer);
-        printf("*buffer after skip spaces = %c\n", *buffer[0]);
+        //printf("*buffer after skip spaces = %c\n", *buffer[0]);
         (*buffer)++;
-        printf("*buffer = %c\n", *buffer[0]);
+        //printf("*buffer = %c\n", *buffer[0]);
         (*buffer)--;
     }
     if (*buffer[0] == '\"')
@@ -145,45 +145,45 @@ static void parse_information_from_file(struct Node *root, char **buffer)
         root->data = (Tree_Elem_t*) calloc(root->size_of_data, sizeof(Tree_Elem_t));
         memcpy(root->data, str, root->size_of_data);
         (*buffer)++;
-        printf("*buffer after str = %c\n", *buffer[0]);
+        //printf("*buffer after str = %c\n", *buffer[0]);
 
         *buffer = skip_spaces(*buffer);
-        printf("*buffer after skip spaces after str = %c\n", *buffer[0]);
+        //printf("*buffer after skip spaces after str = %c\n", *buffer[0]);
     }
     while (*buffer[0] == '{')
     {
         *buffer = skip_spaces(*buffer);
         if (root->left == NULL)
         {
-            printf("go to left\n");
+            //printf("go to left\n");
             root->left = (Node *) calloc(1, sizeof(Node));
             (root->left)->data = NULL;
             (root->left)->left = NULL;
             (root->left)->right = NULL;
             (*buffer)++;
-            getchar();
+            //getchar();
             parse_information_from_file(root->left, buffer);
-            printf("exit from left\n");
+            //printf("exit from left\n");
             continue;
         }
         if (root->right == NULL)
         {
-            printf("go to right\n");
+            //printf("go to right\n");
             root->right = (Node *) calloc(1, sizeof(Node));
             (root->right)->data = NULL;
             (root->right)->left = NULL;
             (root->right)->right = NULL;
             (*buffer)++;
-            getchar();
+            //getchar();
             parse_information_from_file(root->right, buffer);
-            printf("exit from right\n");
+            //printf("exit from right\n");
         }
     }
 
     if (*buffer[0] == '}')
     {
-        printf("return\n");
-        getchar();
+        //printf("return\n");
+        //getchar();
         (*buffer)++;
         *buffer = skip_spaces(*buffer);
         return;
