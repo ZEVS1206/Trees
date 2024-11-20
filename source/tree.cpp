@@ -23,7 +23,7 @@ int main()
         fprintf(stderr, "error = %d\n", error);
         return 1;
     }
-    Akinator(&tree);
+    Run_Akinator(&tree);
     if (tree.error != NO_ERRORS)
     {
         fprintf(stderr, "error = %d\n", tree.error);

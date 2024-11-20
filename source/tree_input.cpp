@@ -125,9 +125,9 @@ static void parse_information_from_file(struct Node *root, char **buffer)
     {
         *buffer = skip_spaces(*buffer);
         //printf("*buffer after skip spaces = %c\n", *buffer[0]);
-        (*buffer)++;
+        //(*buffer)++;
         //printf("*buffer = %c\n", *buffer[0]);
-        (*buffer)--;
+        //(*buffer)--;
     }
     if (*buffer[0] == '\"')
     {
@@ -157,6 +157,7 @@ static void parse_information_from_file(struct Node *root, char **buffer)
         {
             //printf("go to left\n");
             root->left = (Node *) calloc(1, sizeof(Node));
+            (root->left)->parent_node = root;
             (root->left)->data = NULL;
             (root->left)->left = NULL;
             (root->left)->right = NULL;
@@ -170,6 +171,7 @@ static void parse_information_from_file(struct Node *root, char **buffer)
         {
             //printf("go to right\n");
             root->right = (Node *) calloc(1, sizeof(Node));
+            (root->right)->parent_node = root;
             (root->right)->data = NULL;
             (root->right)->left = NULL;
             (root->right)->right = NULL;

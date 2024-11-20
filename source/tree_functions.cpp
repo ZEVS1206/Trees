@@ -7,33 +7,54 @@
 #include "tree.h"
 
 static void destructor_recursive(struct Node *root);
-static void akinator_recursive(struct Tree *tree, char answer, int *verdict);
+static void akinator_recursive(struct Akinator *akinator);
+static void akinator_tree_constructor(struct Akinator *akinator, struct Tree *tree);
 
-Errors_of_tree add_new_node(struct Node **root)
+Errors_of_tree add_new_node(struct Node *root)
 {
-    *root = (Node *) calloc(1, sizeof(Node));
-    if (*root == NULL)
+    if (root == NULL)
+    {
+        return ERROR_OF_PUSH;
+    }
+    root->right = (Node *) calloc(1, sizeof(Node));
+    if (root->right == NULL)
     {
         return ERROR_OF_PUSH;
     }
     printf("Please, enter your answer:)\n");
-    (*root)->left = NULL;
-    (*root)->right = NULL;
+    (root->right)->left = NULL;
+    (root->right)->right = NULL;
     char str[100] = {0};
     fgets(str, 100, stdin);
     size_t len = strlen(str);
-    (*root)->data = (Tree_Elem_t *) calloc(len, sizeof(Tree_Elem_t));
-    if ((*root)->data == NULL)
+    (root->right)->data = (Tree_Elem_t *) calloc(len, sizeof(Tree_Elem_t));
+    (root->right)->parent_node = root;
+    if ((root->right)->data == NULL)
     {
         return ERROR_OF_PUSH;
     }
-    memcpy((*root)->data, str, len);
+    memcpy((root->right)->data, str, len);
+    (root->right)->size_of_data = len;
     printf("Thank you, I will correct the gaps in my knowledge!\n");
     return NO_ERRORS;
 }
 
+static void akinator_tree_constructor(struct Akinator *akinator, struct Tree *tree)
+{
+    if (akinator == NULL || tree == NULL)
+    {
+        tree->error = ERROR_OF_CONSTRUCTOR;
+        return;
+    }
+    akinator->tree = tree;
+    akinator->answer = '\0';
+    akinator->verdict = 0;
+    akinator->last_root = (tree->tmp_root);
+    (akinator->tree)->tmp_root = tree->root;
+    return;
+}
 
-void Akinator(struct Tree *tree)
+void Run_Akinator(struct Tree *tree)
 {
     if (tree == NULL)
     {
@@ -41,61 +62,80 @@ void Akinator(struct Tree *tree)
         return;
     }
     tree->tmp_root = tree->root;
-    int verdict = 0;
-    akinator_recursive(tree, '\0', &verdict);
+    struct Akinator akinator = {0};
+    akinator_tree_constructor(&akinator, tree);
+    akinator_recursive(&akinator);
+    tree->error = (akinator.tree)->error;
     if (tree->error != NO_ERRORS)
     {
         return;
     }
-    // if (verdict == 0)
-    // {
-    //     tree->error = add_new_node(&(tree->tmp_root));
-    // }
+    if (akinator.verdict == 0)
+    {
+        tree->error = add_new_node(akinator.last_root);
+    }
+    printf("Do you want to restart the game?\n");
+    int choise = 0;
+    while ((choise = getchar()) != 'y' && choise != 'n')
+    {
+        printf("Incorrect input!\n");
+    }
+    while (getchar() != '\n');
+    if (tolower(choise) == 'y')
+    {
+        akinator_tree_constructor(&akinator, tree);
+        akinator_recursive(&akinator);
+        tree->error = (akinator.tree)->error;
+    }
     return;
 }
 
-static void akinator_recursive(struct Tree *tree, char answer, int *verdict)
+static void akinator_recursive(struct Akinator *akinator)
 {
-    if (tree->tmp_root == NULL && answer == 'y')
+    if ((akinator->tree)->tmp_root == NULL && akinator->answer == 'y')
     {
-        *verdict = 1;
+        akinator->verdict = 1;
         return;
     }
-    else if (tree->tmp_root == NULL && answer != 'y')
+    else if ((akinator->tree)->tmp_root == NULL && akinator->answer != 'y')
     {
         printf("I don't know, who it can be(((\n");
-        *verdict = 0;
+        akinator->verdict = 0;
         return;
     }
 
-    if ((tree->tmp_root)->data == NULL)
+    if (((akinator->tree)->tmp_root)->data == NULL)
     {
-        tree->error = ERROR_OF_NO_DEFINITION;
+        (akinator->tree)->error = ERROR_OF_NO_DEFINITION;
         return;
     }
-    for (size_t index = 0; index < (tree->tmp_root)->size_of_data; index++)
+    for (size_t index = 0; index < ((akinator->tree)->tmp_root)->size_of_data; index++)
     {
-        printf("%c", ((tree->tmp_root)->data)[index]);
+        printf("%c", (((akinator->tree)->tmp_root)->data)[index]);
     }
     printf("\n");
 
-    char answer_of_user = 0;
+    int answer_of_user = 0;
     while (tolower(answer_of_user = getchar()) != 'y' && tolower(answer_of_user) != 'n')
     {
         printf("Incorrect input!\n");
     }
     while (getchar() != '\n');
-    char low_answer = tolower(answer_of_user);
+    int low_answer = tolower(answer_of_user);
 
     if (low_answer == 'y')
     {
-        tree->tmp_root = (tree->tmp_root)->left;
-        akinator_recursive(tree, low_answer, verdict);
+        akinator->last_root = (akinator->tree)->tmp_root;
+        (akinator->tree)->tmp_root = ((akinator->tree)->tmp_root)->left;
+        akinator->answer = low_answer;
+        akinator_recursive(akinator);
     }
     else if (low_answer == 'n')
     {
-        tree->tmp_root = (tree->tmp_root)->right;
-        akinator_recursive(tree, low_answer, verdict);
+        akinator->last_root = (akinator->tree)->tmp_root;
+        (akinator->tree)->tmp_root = ((akinator->tree)->tmp_root)->right;
+        akinator->answer = low_answer;
+        akinator_recursive(akinator);
     }
 }
 

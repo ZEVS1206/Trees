@@ -43,9 +43,9 @@ static void create_nodes_in_dump(struct Node *root, FILE *file_pointer)
         //printf("node = %p\ndata = %s\n", root, str);
         fprintf(file_pointer, "box%p "
                             "[shape = record,"
-                            " label = \"{<node_adr>address = %p|<node_d>data = %s|"
+                            " label = \"{<node_par>parent = %p|<node_adr>address = %p|<node_d>data = %s|"
                             "{<node_l>left_node = %p|<node_r>right_node = %p}}\"];\n",
-                            root, root, str, root->left, root->right);
+                            root, root->parent_node, root, str, root->left, root->right);
     }
 
 

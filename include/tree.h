@@ -18,8 +18,9 @@ enum Errors_of_tree
 
 struct Node
 {
-    struct Node **tmp_root;
-    Tree_Elem_t* data;
+    struct Node *parent_node;
+    struct Node *tmp_root;
+    Tree_Elem_t *data;
     size_t size_of_data;
     struct Node *left;
     struct Node *right;
@@ -33,9 +34,17 @@ struct Tree
     Errors_of_tree error;
 };
 
+struct Akinator
+{
+    struct Tree *tree;
+    int answer;
+    int verdict;
+    struct Node *last_root;
+};
+
 void Run(struct Tree *tree);
-void Akinator(struct Tree *tree);
-Errors_of_tree add_new_node(struct Node **root);
+void Run_Akinator(struct Tree *tree);
+Errors_of_tree add_new_node(struct Node *root);
 //void create_new_node(struct Tree *tree, Tree_Elem_t element);
 void print_tree(struct Node *root);
 Errors_of_tree tree_destructor(struct Tree *tree);
