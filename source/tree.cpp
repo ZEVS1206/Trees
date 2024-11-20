@@ -15,18 +15,21 @@ int main()
     if (error != NO_ERRORS)
     {
         fprintf(stderr, "error = %d\n", error);
+        error = tree_destructor(&tree);
         return 1;
     }
     error = get_tree_from_json(&tree);
     if (error != NO_ERRORS)
     {
         fprintf(stderr, "error = %d\n", error);
+        error = tree_destructor(&tree);
         return 1;
     }
     Run_Akinator(&tree);
     if (tree.error != NO_ERRORS)
     {
         fprintf(stderr, "error = %d\n", tree.error);
+        error = tree_destructor(&tree);
         return 1;
     }
     tree.tmp_root = tree.root;
@@ -34,6 +37,7 @@ int main()
     if (tree.error != NO_ERRORS)
     {
         fprintf(stderr, "error = %d\n", tree.error);
+        error = tree_destructor(&tree);
         return 1;
     }
     printf("\n");

@@ -9,6 +9,7 @@
 static void create_nodes_in_dump(struct Node *root, FILE *file_pointer);
 static Errors_of_tree create_command_for_console(const char *file_in_name, const char *file_out_name);
 static void create_connections(struct Node *root, FILE *file_pointer);
+static Errors_of_tree check_command(const char *command, size_t size);
 
 static Errors_of_tree create_command_for_console(const char *file_in_name, const char *file_out_name)
 {
@@ -19,7 +20,30 @@ static Errors_of_tree create_command_for_console(const char *file_in_name, const
 
     char command_for_console[100] = ""; // hack
     snprintf(command_for_console, 100, "sudo dot -Tpng %s -o %s.png", file_in_name, file_out_name);
+    Errors_of_tree error = check_command(command_for_console, 100);
+    if (error != NO_ERRORS)
+    {
+        return error;
+    }
     system(command_for_console);
+    return NO_ERRORS;
+}
+
+static Errors_of_tree check_command(const char *command, size_t size)
+{
+    char dangerous_symbols[] = {',', '%', ':','\'', '\"', '\\'};
+    size_t size_of_dangersous_symbols = sizeof(dangerous_symbols) / sizeof(char);
+    for (size_t i = 0; i < size; i++)
+    {
+        char symbol = command[i];
+        for (size_t j = 0; j < size_of_dangersous_symbols; j++)
+        {
+            if (symbol == dangerous_symbols[j])
+            {
+                return ERROR_OF_DANGEROUS_COMMAND;
+            }
+        }
+    }
     return NO_ERRORS;
 }
 

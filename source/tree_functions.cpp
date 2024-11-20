@@ -61,34 +61,41 @@ void Run_Akinator(struct Tree *tree)
         tree->error = ERROR_OF_RUN;
         return;
     }
-    tree->tmp_root = tree->root;
     struct Akinator akinator = {0};
-    akinator_tree_constructor(&akinator, tree);
-    akinator_recursive(&akinator);
-    tree->error = (akinator.tree)->error;
-    if (tree->error != NO_ERRORS)
-    {
-        return;
-    }
-    if (akinator.verdict == 0)
-    {
-        tree->error = add_new_node(akinator.last_root);
-    }
-    printf("Do you want to restart the game?\n");
-    int choise = 0;
-    while ((choise = getchar()) != 'y' && choise != 'n')
-    {
-        printf("Incorrect input!\n");
-    }
-    while (getchar() != '\n');
-    if (tolower(choise) == 'y')
+    while (1)
     {
         akinator_tree_constructor(&akinator, tree);
         akinator_recursive(&akinator);
         tree->error = (akinator.tree)->error;
+        if (tree->error != NO_ERRORS)
+        {
+            return;
+        }
+        if (akinator.verdict == 0)
+        {
+            tree->error = add_new_node(akinator.last_root);
+        }
+        printf("Do you want to restart the game?\n");
+        int choise = 0;
+        while ((choise = getchar()) != 'y' && choise != 'n')
+        {
+            printf("Incorrect input!\n");
+        }
+        while (getchar() != '\n');
+        if (tolower(choise) == 'y')
+        {
+            continue;
+        }
+        else
+        {
+            break;
+        }
     }
+
     return;
 }
+
+
 
 static void akinator_recursive(struct Akinator *akinator)
 {

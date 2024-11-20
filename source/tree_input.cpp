@@ -143,6 +143,11 @@ static void parse_information_from_file(struct Node *root, char **buffer)
         str[i] = '\0';
         root->size_of_data = i;
         root->data = (Tree_Elem_t*) calloc(root->size_of_data, sizeof(Tree_Elem_t));
+        if (root->data == NULL)
+        {
+            printf("Error of reading from file\n");
+            return;
+        }
         memcpy(root->data, str, root->size_of_data);
         (*buffer)++;
         //printf("*buffer after str = %c\n", *buffer[0]);
@@ -157,6 +162,11 @@ static void parse_information_from_file(struct Node *root, char **buffer)
         {
             //printf("go to left\n");
             root->left = (Node *) calloc(1, sizeof(Node));
+            if (root->left == NULL)
+            {
+                printf("Error of creating left node\n");
+                return;
+            }
             (root->left)->parent_node = root;
             (root->left)->data = NULL;
             (root->left)->left = NULL;
@@ -171,6 +181,11 @@ static void parse_information_from_file(struct Node *root, char **buffer)
         {
             //printf("go to right\n");
             root->right = (Node *) calloc(1, sizeof(Node));
+            if (root->right == NULL)
+            {
+                printf("Error of creating right node\n");
+                return;
+            }
             (root->right)->parent_node = root;
             (root->right)->data = NULL;
             (root->right)->left = NULL;
