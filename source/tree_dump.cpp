@@ -31,12 +31,12 @@ static Errors_of_tree create_command_for_console(const char *file_in_name, const
 
 static Errors_of_tree check_command(const char *command, size_t size)
 {
-    char dangerous_symbols[] = {',', '%', ':','\'', '\"', '\\'};
+    char dangerous_symbols[] = {',', '%', ':','\'', '\"', '\\'}; // isalnum + . + - + _ + /
     size_t size_of_dangersous_symbols = sizeof(dangerous_symbols) / sizeof(char);
     for (size_t i = 0; i < size; i++)
     {
         char symbol = command[i];
-        for (size_t j = 0; j < size_of_dangersous_symbols; j++)
+        for (size_t j = 0; j < size_of_dangersous_symbols; j++) // strchr
         {
             if (symbol == dangerous_symbols[j])
             {
@@ -86,7 +86,7 @@ static void create_connections(struct Node *root, FILE *file_pointer)
         return;
     }
 
-
+    // fix copypaste
     if (root->left != NULL)
     {
         fprintf(file_pointer, "box%p:<node_l>->box%p [color=red];\n", root, (root->left));

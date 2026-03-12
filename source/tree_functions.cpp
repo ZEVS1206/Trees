@@ -10,7 +10,7 @@ static void destructor_recursive(struct Node *root);
 static void akinator_recursive(struct Akinator *akinator);
 static void akinator_tree_constructor(struct Akinator *akinator, struct Tree *tree);
 
-Errors_of_tree add_new_node(struct Node *root)
+Errors_of_tree add_new_node(struct Node *root /*const char* */)
 {
     if (root == NULL)
     {
@@ -22,7 +22,12 @@ Errors_of_tree add_new_node(struct Node *root)
         return ERROR_OF_PUSH;
     }
     printf("Please, enter your answer:)\n");
-    (root->right)->left = NULL;
+    (root->right)->left = (Node *) calloc (1, sizeof(Node));
+    if ((root->right)->left == NULL)
+    {
+        return ERROR_OF_PUSH;
+    }
+    ((root->right)->left)->parent_node = root->right;
     (root->right)->right = NULL;
     char str[100] = {0};
     fgets(str, 100, stdin);
@@ -35,6 +40,16 @@ Errors_of_tree add_new_node(struct Node *root)
     }
     memcpy((root->right)->data, str, len);
     (root->right)->size_of_data = len;
+    char ans_str[100] = "OH, I guessed! It's ";
+    size_t new_len = strlen(ans_str) + len;
+    ((root->right)->left)->data = (Tree_Elem_t *) calloc(new_len, sizeof(Tree_Elem_t));
+    if (((root->right)->left)->data == NULL)
+    {
+        return ERROR_OF_PUSH;
+    }
+    snprintf(ans_str + strlen(ans_str), new_len, "%s", str);
+    memcpy(((root->right)->left)->data, ans_str, new_len);
+    ((root->right)->left)->size_of_data = new_len;
     printf("Thank you, I will correct the gaps in my knowledge!\n");
     return NO_ERRORS;
 }
@@ -62,7 +77,8 @@ void Run_Akinator(struct Tree *tree)
         return;
     }
     struct Akinator akinator = {0};
-    while (1)
+    bool is_game_over = false;
+    while (!is_game_over)
     {
         akinator_tree_constructor(&akinator, tree);
         akinator_recursive(&akinator);
@@ -94,8 +110,6 @@ void Run_Akinator(struct Tree *tree)
 
     return;
 }
-
-
 
 static void akinator_recursive(struct Akinator *akinator)
 {

@@ -5,9 +5,6 @@
 #include "tree_dump.h"
 #include "tree_input.h"
 
-
-
-
 int main()
 {
     struct Tree tree = {0};
@@ -15,7 +12,6 @@ int main()
     if (error != NO_ERRORS)
     {
         fprintf(stderr, "error = %d\n", error);
-        error = tree_destructor(&tree);
         return 1;
     }
     error = get_tree_from_json(&tree);
@@ -49,6 +45,3 @@ int main()
     }
     return 0;
 }
-
-
-

@@ -13,6 +13,8 @@ static size_t get_size_of_file(FILE *file_pointer);
 static char * save_root_data(struct Node *root, char *buffer);
 static char * skip_spaces(char *buffer);
 
+static size_t min(size_t a, size_t b);
+
 static char * skip_spaces(char *buffer)
 {
     if (buffer == end_pointer)
@@ -24,6 +26,15 @@ static char * skip_spaces(char *buffer)
         buffer++;
     }
     return buffer;
+}
+
+static size_t min(size_t a, size_t b)
+{
+    if (a < b)
+    {
+        return a;
+    }
+    return b;
 }
 
 static char * save_root_data(struct Node *root, char *buffer)
@@ -121,14 +132,13 @@ static size_t get_size_of_file(FILE *file_pointer)
 static void parse_information_from_file(struct Node *root, char **buffer)
 {
     //printf("element = %c\n", *buffer[0]);
-    if (isspace(*buffer[0]))
-    {
-        *buffer = skip_spaces(*buffer);
-        //printf("*buffer after skip spaces = %c\n", *buffer[0]);
-        //(*buffer)++;
-        //printf("*buffer = %c\n", *buffer[0]);
-        //(*buffer)--;
-    }
+
+    *buffer = skip_spaces(*buffer);
+    //printf("*buffer after skip spaces = %c\n", *buffer[0]);
+    //(*buffer)++;
+    //printf("*buffer = %c\n", *buffer[0]);
+    //(*buffer)--;
+
     if (*buffer[0] == '\"')
     {
         (*buffer)++;
@@ -136,7 +146,10 @@ static void parse_information_from_file(struct Node *root, char **buffer)
         size_t i = 0;
         while (*buffer[0] != '\"')
         {
-            str[i] = *buffer[0];
+            if (i < 100)
+            {
+                str[i] = *buffer[0];
+            }
             (*buffer)++;
             i++;
         }
@@ -148,7 +161,7 @@ static void parse_information_from_file(struct Node *root, char **buffer)
             printf("Error of reading from file\n");
             return;
         }
-        memcpy(root->data, str, root->size_of_data);
+        memcpy(root->data, str, min(root->size_of_data, 100));
         (*buffer)++;
         //printf("*buffer after str = %c\n", *buffer[0]);
 
@@ -158,6 +171,8 @@ static void parse_information_from_file(struct Node *root, char **buffer)
     while (*buffer[0] == '{')
     {
         *buffer = skip_spaces(*buffer);
+        // copy123(&root->left);
+        // copy123(&root->right);
         if (root->left == NULL)
         {
             //printf("go to left\n");
