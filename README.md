@@ -21,7 +21,7 @@
 * 📂 Reads and processes **.json** files with trees
 * 🔤 Use basic structure of tree and its methods
 * 🔁 Supports **different** start data
-* ⚡  Use Graphziv for visualization of tree
+* ⚡  Use Graphviz for visualization of tree
 
 ---
 
